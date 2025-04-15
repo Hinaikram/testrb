@@ -9,7 +9,7 @@ jobs:
   terraform-deploy:
     uses: Hinaikram/testrb/.github/workflows/reuseable-terraform.yaml@main
     with:
-      tf_directory: '.'
+      tf_directory: 'terraform'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -22,7 +22,7 @@ jobs:
 
   springboot-deploy:
     needs: terraform-deploy
-    uses: Hinaikram/testrb/.github/workflows/reuseable-terraform.yaml@main
+    uses: Hinaikram/testrb/.github/workflows/reuseable-springboot.yaml@main
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

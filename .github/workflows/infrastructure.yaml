@@ -14,6 +14,7 @@ env:
   TF_STATE_FILE_KEY: ${{ secrets.TF_STATE_FILE_KEY }}
   TF_STATE_DYNAMODB_TABLE: ${{ secrets.TF_STATE_DYNAMODB_TABLE }}
   S3_AWS_REGION: ${{ secrets.S3_AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  # Add your AWS account ID as a secret
 
 jobs:
   terraform:
@@ -47,8 +48,7 @@ jobs:
             -backend-config="region=${S3_AWS_REGION}" \
             -backend-config="dynamodb_table=${TF_STATE_DYNAMODB_TABLE}"
 
-      # This step checks if the IAM role exists and imports it into the Terraform state if necessary
-      - name: Terraform Import Existing IAM Role
+      - name: Import Existing IAM Role if it Exists
         run: |
           terraform import aws_iam_role.eks_master_role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/eks_master_role || echo "IAM role eks_master_role already exists, skipping import"
 

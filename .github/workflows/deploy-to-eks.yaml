@@ -27,7 +27,7 @@ on:
 
 jobs:
   terraform-deploy:
-    uses: your-org/your-repo/.github/workflows/reusable/terraform.yaml@main
+    uses: Hinaikram/testrb/.github/workflows/reusable/terraform.yaml@main
     with:
       tf_directory: '.'  # Root folder for Terraform files
     secrets:
@@ -42,7 +42,7 @@ jobs:
 
   springboot-deploy:
     needs: terraform-deploy
-    uses: your-org/your-repo/.github/workflows/reusable-springboot.yaml@main
+    uses: Hinaikram/testrb/.github/workflows/reusable/reusable-springboot.yaml@main
     with:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -49,6 +49,16 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
+      - name: Check if deployment exists
+        id: deployment_check
+        run: |
+          kubectl get deployment springboot-deployment || echo "Deployment not found"
+
+      - name: Create Deployment if not exists
+        if: steps.deployment_check.outputs.stdout == 'Deployment not found'
+        run: |
+          kubectl create deployment springboot-deployment --image=${{ secrets.ECR_URL }}:${{ github.sha }}
+
       - name: Deploy Spring Boot app to EKS
         run: |
           kubectl set image deployment/springboot-deployment springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }}

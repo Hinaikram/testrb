@@ -13,6 +13,8 @@ on:
         required: true
       AWS_REGION:
         required: true
+      K8S_NAMESPACE:
+        required: true  # This secret should be passed from the calling workflow
 
 jobs:
   springboot:
@@ -49,20 +51,14 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-      - name: Check if deployment exists
-        id: deployment_check
+      - name: Check Kubernetes namespaces
         run: |
-          kubectl get deployment springboot-deployment || echo "Deployment not found"
+          kubectl get namespaces
 
-      - name: Create Deployment if not exists
-        if: steps.deployment_check.outputs.stdout == 'Deployment not found'
+      - name: Set image for Spring Boot app in EKS
         run: |
-          kubectl create deployment springboot-deployment --image=${{ secrets.ECR_URL }}:${{ github.sha }}
-
-      - name: Deploy Spring Boot app to EKS
-        run: |
-          kubectl set image deployment/springboot-deployment springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }}
-          kubectl rollout status deployment/springboot-deployment
+          kubectl set image deployment/springboot-deployment springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }} -n ${{ secrets.K8S_NAMESPACE }}
+          kubectl rollout status deployment/springboot-deployment -n ${{ secrets.K8S_NAMESPACE }}
 
       - name: Notify success
         run: echo "Spring Boot application deployed to EKS successfully! 🚀"

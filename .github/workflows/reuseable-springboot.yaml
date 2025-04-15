@@ -27,7 +27,7 @@ jobs:
           java-version: '17'
 
       - name: Build Spring Boot App
-        run: mvn clean install --no-transfer-progress
+        run: mvn clean install spring-boot:repackage --no-transfer-progress
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:

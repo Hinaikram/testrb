@@ -50,7 +50,7 @@ jobs:
 
       - name: Import Existing IAM Role if it Exists
         run: |
-          terraform import aws_iam_role.eks_master_role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/eks_master_role || echo "IAM role eks_master_role already exists, skipping import"
+          terraform import aws_iam_role.eks_master_role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/eks_master_role || echo "No existing IAM role found, creating a new one."
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan

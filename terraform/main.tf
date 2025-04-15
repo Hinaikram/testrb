@@ -46,7 +46,7 @@ module "bastion_host" {
   bastion_name   = var.bastion_name
 }
 
-# EKS module configuration
+# EKS module configuration updated
 module "eks" {
   source                               = "./modules/eks"
   public_subnet_ids                    = module.vpc.public_subnets

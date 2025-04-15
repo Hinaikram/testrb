@@ -1,0 +1,53 @@
+name: Deploy Infra and Spring Boot Application to EKS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      ECR_URL:
+        required: true
+      TF_STATE_S3_BUCKET:
+        required: true
+      TF_STATE_FILE_KEY:
+        required: true
+      TF_STATE_DYNAMODB_TABLE:
+        required: true
+      S3_AWS_REGION:
+        required: true
+      AWS_ACCOUNT_ID:
+        required: true
+
+jobs:
+  terraform-deploy:
+    uses: your-org/your-repo/.github/workflows/reusable/terraform.yaml@main
+    with:
+      tf_directory: '.'  # Root folder for Terraform files
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      TF_STATE_S3_BUCKET: ${{ secrets.TF_STATE_S3_BUCKET }}
+      TF_STATE_FILE_KEY: ${{ secrets.TF_STATE_FILE_KEY }}
+      TF_STATE_DYNAMODB_TABLE: ${{ secrets.TF_STATE_DYNAMODB_TABLE }}
+      S3_AWS_REGION: ${{ secrets.S3_AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  springboot-deploy:
+    needs: terraform-deploy
+    uses: your-org/your-repo/.github/workflows/reusable-springboot.yaml@main
+    with:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}

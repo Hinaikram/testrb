@@ -14,7 +14,7 @@ on:
       AWS_REGION:
         required: true
       K8S_NAMESPACE:
-        required: true  # This secret should be passed from the calling workflow
+        required: true
 
 jobs:
   springboot:
@@ -55,10 +55,10 @@ jobs:
         run: |
           kubectl get namespaces
 
-      - name: Set image for Spring Boot app in EKS
+      - name: Set image for Spring Boot app in EKS (default namespace)
         run: |
-          kubectl set image deployment/springboot-deployment springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }} -n ${{ secrets.K8S_NAMESPACE }}
-          kubectl rollout status deployment/springboot-deployment -n ${{ secrets.K8S_NAMESPACE }}
+          kubectl set image deployment/springboot-deployment springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }} -n default
+          kubectl rollout status deployment/springboot-deployment -n default
 
       - name: Notify success
         run: echo "Spring Boot application deployed to EKS successfully! 🚀"

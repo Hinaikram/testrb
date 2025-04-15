@@ -61,4 +61,4 @@ jobs:
           kubectl rollout status deployment/springboot-deployment -n default
 
       - name: Notify success
-        run: echo "Spring Boot application deployed to EKS successfully! 🚀"
+        run: echo "Spring Boot application deployed to EKS successfully! 🚀 hurry"

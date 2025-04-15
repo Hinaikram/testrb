@@ -13,8 +13,6 @@ on:
         required: true
       AWS_REGION:
         required: true
-      K8S_NAMESPACE:
-        required: true
 
 jobs:
   springboot:
@@ -61,4 +59,4 @@ jobs:
           kubectl rollout status deployment/springboot-deployment -n default
 
       - name: Notify success
-        run: echo "Spring Boot application deployed to EKS successfully! 🚀 hurry"
+        run: echo "Spring Boot application deployed to EKS successfully! 🚀"

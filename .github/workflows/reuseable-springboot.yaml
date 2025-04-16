@@ -49,13 +49,12 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-      - name: Apply Kubernetes Deployment
-        run: |
-          kubectl apply -f testrb/kubernetes/deployment.yaml
+      - name: Check Kubernetes namespaces
+        run: kubectl get namespaces
 
-      - name: Set image for Spring Boot app in EKS (default namespace)
+      - name: Deploy to EKS using manifest
         run: |
-          kubectl set image deployment/springboot-app springboot-app=${{ secrets.ECR_URL }}:${{ github.sha }} -n default
+          kubectl apply -f kubernetes/deployment.yaml
           kubectl rollout status deployment/springboot-app -n default
 
       - name: Notify success

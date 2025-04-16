@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: springboot-app
-          image: 715841370482.dkr.ecr.ap-south-1.amazonaws.com/rb-ecr:latest
+          image: 715841370482.dkr.ecr.ap-south-1.amazonaws.com/rb-ecr:latest  # ECR image URI
           ports:
             - containerPort: 8080
 ---
